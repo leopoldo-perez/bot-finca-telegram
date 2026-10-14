@@ -1,8 +1,8 @@
 """
-Importa el inventario de vinos desde el Excel de Eva a la hoja "Vinos" de Google Sheets.
+Importa el inventario de vinos desde el Excel de inventario a la hoja "Vinos" de Google Sheets.
 
-  py importar_vinos.py "C:\\ruta\\Inventario Vinos EEDD.xlsx"            # simulación, no escribe nada
-  py importar_vinos.py "C:\\ruta\\Inventario Vinos EEDD.xlsx" --aplicar  # escribe en Google Sheets
+  py importar_vinos.py "C:\\ruta\\Inventario Vinos.xlsx"            # simulación, no escribe nada
+  py importar_vinos.py "C:\\ruta\\Inventario Vinos.xlsx" --aplicar  # escribe en Google Sheets
 
 Requiere: pip install openpyxl (solo para este script, el bot no lo necesita).
 Usa la columna "No. Botellas" como STOCK INICIAL. Las columnas de salidas históricas se ignoran.

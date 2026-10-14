@@ -14,11 +14,11 @@ El ID de Telegram es un número entero, por ejemplo: 123456789
 # Aquí van IDs de ejemplo. Los reales van en workers_local.py (no se sube a git; ver más abajo).
 TRABAJADORES: dict[int, str] = {
     111111111: "Administrador",     # Admin (propietario del proyecto)
-    123456790: "Isaac",             # Guarda de la finca (responsable del campo)
-    123456791: "Andrés",            # Mozo de Isaac (campo)
-    123456792: "José Luis",         # Mozo de Isaac (campo)
-    123456793: "Roberto",           # Pareja que trabaja en la casa
-    123456794: "Carmen",            # Pareja que trabaja en la casa
+    123456790: "Guarda",            # Guarda de la finca (responsable del campo)
+    123456791: "Mozo 1",            # Mozo de campo
+    123456792: "Mozo 2",            # Mozo de campo
+    123456793: "Casa 1",            # Personal de la casa
+    123456794: "Casa 2",            # Personal de la casa
 }
 
 # ID de Telegram del administrador (recibe avisos de error y reportes)
@@ -27,8 +27,8 @@ ADMIN_ID: int = 111111111
 
 # ID de Telegram de la secretaria (recibe avisos de cada parte/movimiento y puede usar /hoy).
 # Se obtiene con /miid desde su Telegram. Si vale 0 no se envía nada.
-# PRUEBA: ahora es el del admin, para ver cómo le llegan los avisos a Eva.
-# Al poner el ID real de Eva: SECRETARIA_ID = <su id> y SECRETARIA_EN_PRUEBA = False.
+# Mientras no se tenga su ID real, se usa el del admin para probar los avisos.
+# Con el ID real: SECRETARIA_ID = <su id> y SECRETARIA_EN_PRUEBA = False.
 SECRETARIA_ID: int = ADMIN_ID
 SECRETARIA_EN_PRUEBA: bool = True   # True = también recibe aviso de los mensajes que envía ella misma
 
@@ -43,7 +43,7 @@ def puede_ver_resumen(telegram_id: int) -> bool:
 
 # Quién puede registrar y consultar vinos (/vino, /stock, /deshacer). Se define por NOMBRE (el de
 # TRABAJADORES), así no hay que tocar nada cuando se sustituyan los IDs provisionales por los reales.
-VINOS_AUTORIZADOS: set[str] = {"Administrador", "Roberto", "Carmen"}
+VINOS_AUTORIZADOS: set[str] = {"Administrador", "Casa 1", "Casa 2"}
 
 
 def puede_gestionar_vinos(telegram_id: int) -> bool:

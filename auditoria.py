@@ -225,7 +225,7 @@ def revisar_configuracion() -> None:
     if not W.obtener_secretaria_id():
         anotar("ERROR", "config", "SECRETARIA_ID = 0: nada llega al chat de la secretaria (se obtiene con /miid desde su Telegram)")
     elif W.SECRETARIA_EN_PRUEBA:
-        anotar("AVISO", "config", "Modo prueba de Eva activo: SECRETARIA_ID es el del admin")
+        anotar("AVISO", "config", "Modo prueba de la secretaria activo: SECRETARIA_ID es el del admin")
     prov = [n for i, n in W.TRABAJADORES.items() if 123456000 <= i < 123457000]
     if prov:
         anotar("ERROR", "config", f"Trabajadores con ID provisional (no podrán usar el bot): {', '.join(prov)}")

@@ -1,7 +1,7 @@
 $action = New-ScheduledTaskAction `
     -Execute "py" `
     -Argument "bot.py" `
-    -WorkingDirectory "C:\Users\PORTATIL OFICINA\Downloads\Partes de trabajo"
+    -WorkingDirectory $PSScriptRoot
 
 $trigger = New-ScheduledTaskTrigger -AtLogOn
 

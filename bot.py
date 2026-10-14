@@ -3,7 +3,7 @@ Bot de Telegram para recibir los registros de la finca (partes, vinos, gasoil y 
 Funciona con polling: no necesita URL pública ni servidor web.
 
 Flujo único: el usuario escribe -> el bot entiende -> enseña una FICHA con lo que va a apuntar
--> el usuario pulsa [Sí, apuntar] o [No] -> solo entonces se escribe en el Sheet y se avisa a Eva.
+-> el usuario pulsa [Sí, apuntar] o [No] -> solo entonces se escribe en el Sheet y se avisa a la secretaria.
 """
 
 import logging
@@ -110,7 +110,7 @@ def _boton(texto: str, data: str) -> list[InlineKeyboardButton]:
     return [InlineKeyboardButton(texto, callback_data=data)]
 
 
-# ── Avisos a Eva y al administrador ───────────────
+# ── Avisos a la secretaria y al administrador ───────────────
 
 _ultimo_fallo_aviso = 0.0
 

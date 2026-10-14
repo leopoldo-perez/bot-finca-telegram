@@ -4,7 +4,7 @@ powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { (
 timeout /t 2 /nobreak >nul
 
 echo Arrancando bot...
-cd /d "C:\Users\PORTATIL OFICINA\Downloads\Partes de trabajo"
+cd /d "%~dp0"
 start /min py bot.py
 echo Bot arrancado en segundo plano.
 timeout /t 2 /nobreak >nul
