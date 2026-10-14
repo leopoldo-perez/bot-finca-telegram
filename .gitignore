@@ -1,0 +1,37 @@
+# === Secretos y credenciales ===
+.env
+credentials/
+
+# === Python bytecode ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === IDEs ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === Logs ===
+*.log
+logs/
+
+# === Archivos Excel históricos (datos privados) ===
+2024/
+2025/
+2026/
+*.xlsx
+
+# === Otros ===
+.DS_Store
+Thumbs.db
+
+# === Claude Code / otros ===
+.claude/
+*.json
+!requirements*.json
+
+presentacion/
+workers_local.py
