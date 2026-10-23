@@ -4,6 +4,7 @@ y convertirlos en registros estructurados de partes de trabajo.
 """
 
 import base64
+import logging
 import difflib
 import json
 import os
@@ -14,7 +15,7 @@ from datetime import datetime, date, timedelta
 from pathlib import Path
 from typing import Optional
 
-from groq import Groq
+from groq import Groq, NotFoundError
 from dotenv import load_dotenv
 from zona import ahora, hoy
 
@@ -74,6 +75,26 @@ def _extra_modelo(modelo: str) -> dict:
     return {"reasoning_effort": "low"} if modelo.startswith("openai/gpt-oss") else {}
 
 
+# Si Groq retira un modelo, se prueba otro disponible de la misma lista en vez de dejar el bot parado.
+_ALTERNATIVAS = {
+    MODELO_TEXTO: ["openai/gpt-oss-120b", "openai/gpt-oss-20b"],
+    MODELO_VISION: ["qwen/qwen3.8-27b"],
+}
+
+
+def _chat(modelo: str, **kw):
+    """client.chat.completions.create con respaldo automático si el modelo ya no existe."""
+    try:
+        return client.chat.completions.create(model=modelo, **{**_extra_modelo(modelo), **kw})
+    except NotFoundError:
+        disponibles = {m.id for m in client.models.list().data}
+        for alt in _ALTERNATIVAS.get(modelo, []):
+            if alt != modelo and alt in disponibles:
+                logging.getLogger(__name__).warning("Modelo %s no disponible; uso %s", modelo, alt)
+                return client.chat.completions.create(model=alt, **{**_extra_modelo(alt), **kw})
+        raise
+
+
 def extraer_partes(
     trabajador: str,
     texto: str = "",
@@ -120,8 +141,8 @@ def extraer_partes(
         ]
         modelo = MODELO_TEXTO
 
-    response = client.chat.completions.create(
-        model=modelo,
+    response = _chat(
+        modelo,
         messages=messages,
         temperature=0.1,
         max_tokens=6000,
@@ -255,8 +276,8 @@ def extraer_movimientos_vino(texto: str, fecha_referencia: Optional[date] = None
         f"Hoy es {fecha_referencia.strftime('%d/%m/%Y')} (ISO {fecha_referencia.isoformat()}).\n"
         f"Ayer fue {ayer.isoformat()}.\n\nMensaje:\n{texto}"
     )
-    response = client.chat.completions.create(
-        model=MODELO_TEXTO,
+    response = _chat(
+        MODELO_TEXTO,
         messages=[
             {"role": "system", "content": PROMPT_VINOS},
             {"role": "user", "content": contexto},
@@ -312,8 +333,8 @@ def extraer_gasoil(texto: str, fecha_referencia: Optional[date] = None) -> list[
         f"Hoy es {fecha_referencia.strftime('%d/%m/%Y')} (ISO {fecha_referencia.isoformat()}).\n"
         f"Ayer fue {ayer.isoformat()}.\n\nMensaje:\n{texto}"
     )
-    response = client.chat.completions.create(
-        model=MODELO_TEXTO,
+    response = _chat(
+        MODELO_TEXTO,
         messages=[
             {"role": "system", "content": PROMPT_GASOIL},
             {"role": "user", "content": contexto},
@@ -357,8 +378,8 @@ def extraer_piensos(texto: str, fecha_referencia: Optional[date] = None) -> list
         f"Hoy es {fecha_referencia.strftime('%d/%m/%Y')} (ISO {fecha_referencia.isoformat()}).\n"
         f"Ayer fue {ayer.isoformat()}.\n\nMensaje:\n{texto}"
     )
-    response = client.chat.completions.create(
-        model=MODELO_TEXTO,
+    response = _chat(
+        MODELO_TEXTO,
         messages=[{"role": "system", "content": PROMPT_PIENSOS}, {"role": "user", "content": contexto}],
         temperature=0,
         max_tokens=2048,

@@ -45,10 +45,10 @@ def _get_spreadsheet() -> gspread.Spreadsheet:
             creds = Credentials.from_service_account_info(info, scopes=SCOPES)
         else:
             # Modo local: credenciales en archivo de disco
-            creds = Credentials.from_service_account_file(
-                os.environ["GOOGLE_SERVICE_ACCOUNT_FILE"],
-                scopes=SCOPES
-            )
+            ruta = Path(os.environ["GOOGLE_SERVICE_ACCOUNT_FILE"])
+            if not ruta.is_absolute():          # relativa a la carpeta del bot, no a donde se lance
+                ruta = Path(__file__).parent / ruta
+            creds = Credentials.from_service_account_file(str(ruta), scopes=SCOPES)
         gc = gspread.authorize(creds, http_client=gspread.BackOffHTTPClient)
         _spreadsheet = gc.open_by_key(os.environ["GOOGLE_SPREADSHEET_ID"])
     return _spreadsheet
