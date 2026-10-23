@@ -34,6 +34,7 @@ logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(message)s",
     level=logging.INFO
 )
+logging.getLogger("httpx").setLevel(logging.WARNING)   # sus avisos incluyen el token del bot en la URL
 logger = logging.getLogger(__name__)
 
 ES_VINO = re.compile(r"\b(vino|vinos|botella|botellas|cava|champ[aá][nñ]|magnum|caja|cajas)\b", re.I)
