@@ -249,6 +249,11 @@ def construir_peticiones(sh, pos: dict | None = None) -> list[dict]:
             "backgroundColor": rgb(VERDE), "horizontalAlignment": "CENTER", "verticalAlignment": "MIDDLE",
             "wrapStrategy": "WRAP", "textFormat": {"bold": True, "fontSize": 10, "foregroundColor": rgb("#FFFFFF")}}},
             "fields": "userEnteredFormat(backgroundColor,horizontalAlignment,verticalAlignment,wrapStrategy,textFormat)"}})
+        for c in range(n):    # el título de cada columna se alinea igual que sus datos
+            alin_cab = cfg["formatos"][c][2] if c in cfg["formatos"] else "LEFT"
+            req.append({"repeatCell": {"range": rango(sid, 0, 1, c, c + 1),
+                                       "cell": {"userEnteredFormat": {"horizontalAlignment": alin_cab}},
+                                       "fields": "userEnteredFormat.horizontalAlignment"}})
         req.append({"updateDimensionProperties": {"range": {"sheetId": sid, "dimension": "ROWS", "startIndex": 0, "endIndex": 1},
                                                   "properties": {"pixelSize": 38}, "fields": "pixelSize"}})
         req.append({"updateDimensionProperties": {"range": {"sheetId": sid, "dimension": "ROWS", "startIndex": 1, "endIndex": filas},
